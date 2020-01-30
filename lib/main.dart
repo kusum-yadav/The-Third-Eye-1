@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
   Future _speakup() async{
-    await flutterTts.speak("Calling menu");
+    await flutterTts.speak("test");
   }
   Future _speakdown() async{
     await flutterTts.speak("camera");

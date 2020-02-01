@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'camera.dart';
+import 'contactList.dart';
+import 'dialer.dart';
+import 'emergencyCall.dart';
 import 'package:vibration/vibration.dart';
 class callingMenu extends StatefulWidget {
   @override
@@ -42,7 +45,7 @@ class _callingMenuState extends State<callingMenu> {
               vibrate();
               _speakup();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>camera()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>contactList()));
                 // _swipeDirection = "Swipe Up";
               });
             },
@@ -50,7 +53,7 @@ class _callingMenuState extends State<callingMenu> {
               vibrate();
               _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>camera()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>emergencyCall()));
                 // _swipeDirection = "Swipe Down";
               });
             },
@@ -66,7 +69,7 @@ class _callingMenuState extends State<callingMenu> {
               vibrate();
               _speakright();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>camera()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>dialer()));
                 // _swipeDirection = "Swipe Right";
               });
             },

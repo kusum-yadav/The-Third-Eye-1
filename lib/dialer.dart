@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-import 'emergencylocation.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
-class location extends StatefulWidget {
+import 'package:flutter_tts/flutter_tts.dart';
+class dialer extends StatefulWidget {
   @override
-  _locationState createState() => _locationState();
+  _dialerState createState() => _dialerState();
 }
 
-class _locationState extends State<location> {
+class _dialerState extends State<dialer> {
   FlutterTts flutterTts=FlutterTts();
   @override
   void vibrate()
@@ -16,10 +15,7 @@ class _locationState extends State<location> {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
   Future _speakleft() async{
-    await flutterTts.speak("home menu");
-  }
-  Future _speakright() async{
-    await flutterTts.speak("emergency location sent to Harshit Gupta");
+    await flutterTts.speak("Calling menu");
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,14 +23,13 @@ class _locationState extends State<location> {
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/location.jpg"),
+                  image: AssetImage("assets/images/comingsoon.jpg"),
                   fit: BoxFit.cover,
           ),
         ),
         ),
             // child: Image.asset('assets/images/Home.jpg'),
             onSwipeUp: () {
-              
               setState(() {
                 // _swipeDirection = "Swipe Up";
               });
@@ -48,14 +43,11 @@ class _locationState extends State<location> {
               vibrate();
               _speakleft();
               setState(() {
-                Navigator.pop(context);
+                 Navigator.pop(context);
               });
             },
             onSwipeRight: () {
-              vibrate();
-              _speakright();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>emergencyLocation()));
                 // _swipeDirection = "Swipe Right";
               });
             },

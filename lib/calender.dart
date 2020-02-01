@@ -1,71 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-import 'package:battery/battery.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'calender.dart';
-import 'battery.dart';
-import 'time.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
-class more extends StatefulWidget {
+class calender extends StatefulWidget {
   @override
-  _moreState createState() => _moreState();
+  _calenderState createState() => _calenderState();
 }
 
-class _moreState extends State<more> {
+class _calenderState extends State<calender> {
   FlutterTts flutterTts=FlutterTts();
+
   @override
+  
   void vibrate()
   {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-  Future _speakup() async{
-  //  await flutterTts.speak("today's date");
-   DateTime now = DateTime.now();
-   String formattedDate = DateFormat('EEEEEEE d MMM y').format(now);
-  await flutterTts.speak("Today's Date is "+formattedDate);
-    }
-  Future _speakdown() async{
-    //  await flutterTts.speak("Current time");
-    DateTime now = DateTime.now();
-   String formattedDate = DateFormat('jm').format(now);
-  await flutterTts.speak("current time is "+formattedDate);
-  }
   Future _speakleft() async{
-    await flutterTts.speak("home menu");
-  }
-  Future<int> _speakright() async{
-    var battery = Battery();
-    var percent = battery.batteryLevel;
-    String bp= battery.batteryLevel.toString();
-    print(bp);
-    await flutterTts.speak(bp);
+
+    await flutterTts.speak("more menu");
   }
   Widget build(BuildContext context) {
+      
     return Scaffold(
       body: SwipeDetector( 
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/More.jpg"),
+                  image: AssetImage("assets/images/comingsoon.jpg"),
                   fit: BoxFit.cover,
           ),
         ),
+        // child: Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: <Widget>[
+        //     Text("hello",
+        //     style: TextStyle(
+        //       fontFamily: 'Lobster',
+        //     ),
+        //     )
+        //   ],
+        // ),
+
         ),
+        
             // child: Image.asset('assets/images/Home.jpg'),
             onSwipeUp: () {
-              vibrate();
-              _speakup();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>calender()));
                 // _swipeDirection = "Swipe Up";
               });
             },
             onSwipeDown: () {
-              vibrate();
-              _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>battery()));
                 // _swipeDirection = "Swipe Down";
               });
             },
@@ -73,15 +60,11 @@ class _moreState extends State<more> {
               vibrate();
               _speakleft();
               setState(() {
-                Navigator.pop(context);
-                // _swipeDirection = "Swipe Left";
+                 Navigator.pop(context);
               });
             },
             onSwipeRight: () {
-              vibrate();
-              _speakright();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>time()));
                 // _swipeDirection = "Swipe Right";
               });
             },
@@ -93,6 +76,9 @@ class _moreState extends State<more> {
         horizontalSwipeMinDisplacement:50.0,
         horizontalSwipeMinVelocity: 200.0),
           ),
+        
         );
+        
   }
 }
+//kk:mm:ss \n 

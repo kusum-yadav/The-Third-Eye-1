@@ -17,13 +17,26 @@ class _batteryState extends State<battery> {
   Future _speakleft() async{
     await flutterTts.speak("more menu");
   }
+  // Future<int> _speakright() async{
+  //   var battery = Battery();
+  //   final int percent =await battery.batteryLevel;
+  //   // String bp= battery.batteryLevel.toString();
+  // //  print(percent);
+  //  flutterTts.speak(percent.toString()+" percent");
+  // }
   Widget build(BuildContext context) {
     return Scaffold(
       body: SwipeDetector( 
         child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Text(_speakright().toString())
+            ],
+          ),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/comingsoon.jpg"),
+                  image: AssetImage("assets/images/blank.jpg"),
                   fit: BoxFit.cover,
           ),
         ),

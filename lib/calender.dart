@@ -28,7 +28,7 @@ class _calenderState extends State<calender> {
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/comingsoon.jpg"),
+                  image: AssetImage("assets/images/blank.jpg"),
                   fit: BoxFit.cover,
           ),
         ),

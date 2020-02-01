@@ -6,7 +6,7 @@ import 'callingMenu.dart';
 import 'camera.dart';
 import 'more.dart';
 import 'location.dart';
-void main() => runApp(MyApp());
+Future<void> main() async{runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
   Future _speakup() async{
-    await flutterTts.speak("test");
+    await flutterTts.speak("Calling menu");
   }
   Future _speakdown() async{
     await flutterTts.speak("camera");

@@ -22,7 +22,7 @@ class _moreState extends State<more> {
   Future _speakup() async{
   //  await flutterTts.speak("today's date");
    DateTime now = DateTime.now();
-   String formattedDate = DateFormat('EEEEEEE d MMM y').format(now);
+   String formattedDate = DateFormat('E d MMM y').format(now);
   await flutterTts.speak("Today's Date is "+formattedDate);
     }
   Future _speakdown() async{
@@ -36,10 +36,10 @@ class _moreState extends State<more> {
   }
   Future<int> _speakright() async{
     var battery = Battery();
-    var percent = battery.batteryLevel;
-    String bp= battery.batteryLevel.toString();
-    print(bp);
-    await flutterTts.speak(bp);
+    final int percent =await battery.batteryLevel;
+    // String bp= battery.batteryLevel.toString();
+  //  print(percent);
+   flutterTts.speak(percent.toString()+" percent");
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +65,7 @@ class _moreState extends State<more> {
               vibrate();
               _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>battery()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>time()));
                 // _swipeDirection = "Swipe Down";
               });
             },
@@ -81,7 +81,7 @@ class _moreState extends State<more> {
               vibrate();
               _speakright();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>time()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>battery()));
                 // _swipeDirection = "Swipe Right";
               });
             },

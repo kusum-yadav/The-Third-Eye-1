@@ -17,68 +17,76 @@ class _calenderState extends State<calender> {
   {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
+  var _formatedDate;
   Future _speakleft() async{
-
     await flutterTts.speak("more menu");
   }
-  Widget build(BuildContext context) {
-      
-    return Scaffold(
-      body: SwipeDetector( 
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/comingsoon.jpg"),
-                  fit: BoxFit.cover,
-          ),
-        ),
-        // child: Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: <Widget>[
-        //     Text("hello",
-        //     style: TextStyle(
-        //       fontFamily: 'Lobster',
-        //     ),
-        //     )
-        //   ],
-        // ),
+  Future<String> _dateandtime() async{
+    DateTime now = DateTime.now();
+   String formatedDate = DateFormat('      EEEE\n\nd MMMM y').format(now);
+    // var battery = Battery();
+    // final int percent =await battery.batteryLevel;
+    return formatedDate;
+  }
 
-        ),
-        
-            // child: Image.asset('assets/images/Home.jpg'),
-            onSwipeUp: () {
-              setState(() {
-                // _swipeDirection = "Swipe Up";
-              });
-            },
-            onSwipeDown: () {
-              setState(() {
-                // _swipeDirection = "Swipe Down";
-              });
-            },
-            onSwipeLeft: () {
-              vibrate();
-              _speakleft();
-              setState(() {
-                 Navigator.pop(context);
-              });
-            },
-            onSwipeRight: () {
-              setState(() {
-                // _swipeDirection = "Swipe Right";
-              });
-            },
-            swipeConfiguration: SwipeConfiguration(
-        verticalSwipeMinVelocity: 100.0,
-        verticalSwipeMinDisplacement: 50.0,
-        verticalSwipeMaxWidthThreshold:100.0,
-        horizontalSwipeMaxHeightThreshold: 50.0,
-        horizontalSwipeMinDisplacement:50.0,
-        horizontalSwipeMinVelocity: 200.0),
+   _calenderState(){
+   _dateandtime().then((date) {
+            // If we need to rebuild the widget with the resulting data,
+            // make sure to use `setState`
+            setState(() {
+                _formatedDate = date;
+            });
+        });
+ }
+  Widget build(BuildContext context) {return Scaffold(
+          body:new Container(
+        child: SwipeDetector( 
+          child: Container(
+            alignment: Alignment.center,
+            child: new Text("$_formatedDate",style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+
+            ),),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/blank.jpg"),
+                    fit: BoxFit.cover,
+            ),
           ),
-        
-        );
-        
+          ),
+              // child: Image.asset('assets/images/Home.jpg'),
+              onSwipeUp: () {
+                setState(() {
+                  // _swipeDirection = "Swipe Up";
+                });
+              },
+              onSwipeDown: () {
+                setState(() {
+                  // _swipeDirection = "Swipe Down";
+                });
+              },
+              onSwipeLeft: () {
+                vibrate();
+                _speakleft();
+                setState(() {
+                   Navigator.pop(context);
+                });
+              },
+              onSwipeRight: () {
+                setState(() {
+                  // _swipeDirection = "Swipe Right";
+                });
+              },
+              swipeConfiguration: SwipeConfiguration(
+          verticalSwipeMinVelocity: 100.0,
+          verticalSwipeMinDisplacement: 50.0,
+          verticalSwipeMaxWidthThreshold:100.0,
+          horizontalSwipeMaxHeightThreshold: 50.0,
+          horizontalSwipeMinDisplacement:50.0,
+          horizontalSwipeMinVelocity: 200.0),
+            ),
+          ),
+    );
   }
 }
-//kk:mm:ss \n 

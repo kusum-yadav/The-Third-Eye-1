@@ -23,7 +23,7 @@ class _calenderState extends State<calender> {
   }
   Future<String> _dateandtime() async{
     DateTime now = DateTime.now();
-   String formatedDate = DateFormat('      EEEE\n\nd MMMM y').format(now);
+   String formatedDate = DateFormat('    EEEE\n d MMMM\n      y').format(now);
     // var battery = Battery();
     // final int percent =await battery.batteryLevel;
     return formatedDate;
@@ -50,7 +50,7 @@ class _calenderState extends State<calender> {
             ),),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/blank.jpg"),
+                    image: AssetImage("assets/images/date.jpg"),
                     fit: BoxFit.cover,
             ),
           ),

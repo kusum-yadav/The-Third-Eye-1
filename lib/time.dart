@@ -48,7 +48,7 @@ class _timeState extends State<time> {
             ),),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/blank.jpg"),
+                    image: AssetImage("assets/images/time.jpg"),
                     fit: BoxFit.cover,
             ),
           ),

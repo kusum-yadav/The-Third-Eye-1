@@ -43,13 +43,13 @@ class _emergencyLocationState extends State<emergencyLocation> {
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n${currentLocation['latitude']}/${currentLocation['longitude']}',style: TextStyle(
-              fontSize: 70,
+            child: new Text('\n\n\n\n  Your Location \n\nLat:${currentLocation['latitude']}\nLng${currentLocation['longitude']}\n\n       Sent To\n  Harshit Gupta',style: TextStyle(
+              fontSize: 40,
               fontWeight: FontWeight.bold,
             ),),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/location.jpg"),
+                    image: AssetImage("assets/images/blank.jpg"),
                     fit: BoxFit.cover,
             ),
           ),

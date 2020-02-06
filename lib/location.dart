@@ -5,6 +5,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
+import 'package:sms_maintained/sms.dart';
 import 'dart:async';
 class location extends StatefulWidget {
   @override
@@ -27,6 +28,15 @@ class _locationState extends State<location> {
       });
     }); 
       }
+      void sendsms(){
+     SmsSender sender = new SmsSender();
+  //String address = "9654058740";
+  List<String> x = ["9654014558", "9654058740", "9870681703"];
+  String address;
+  for(var i in x){
+    address=i;
+  sender.sendSms(new SmsMessage(address, 'I need help\nPlease track me, I am here:- https://www.google.com/maps/place/${currentLocation['latitude']},${currentLocation['longitude']}'));
+  }}
       String error;
   @override
   void vibrate()
@@ -44,8 +54,8 @@ class _locationState extends State<location> {
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n${currentLocation['latitude']}/${currentLocation['longitude']}',style: TextStyle(
-              fontSize: 70,
+            child: new Text('\n\n\n     Your Location Is\nLatitude:-${currentLocation['latitude']}\nLongitude:-${currentLocation['longitude']}',style: TextStyle(
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             ),),
             decoration: BoxDecoration(
@@ -75,6 +85,7 @@ class _locationState extends State<location> {
               },
               onSwipeRight: () {
                 vibrate();
+                sendsms();
                 _speakright();
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>emergencyLocation()));

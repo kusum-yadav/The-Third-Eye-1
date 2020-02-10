@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'camera.dart';
+import 'package:intent/intent.dart' as android_intent;
+import 'package:intent/action.dart' as android_action;
+//import 'camera.dart';
+import 'package:quiver/async.dart';
 import 'contactList.dart';
 import 'dialer.dart';
-import 'emergencyCall.dart';
+//import 'emergencyCall.dart';
 import 'package:vibration/vibration.dart';
 class callingMenu extends StatefulWidget {
   @override
@@ -30,6 +33,25 @@ class _callingMenuState extends State<callingMenu> {
   Future _speakright() async{
     await flutterTts.speak("Dialer");
   }
+int _start = 1;
+int _current = 1;
+
+void startTimer() {
+  CountdownTimer countDownTimer = new CountdownTimer(
+    new Duration(seconds: _start),
+    new Duration(seconds: 1),
+  );
+
+  var sub = countDownTimer.listen(null);
+  sub.onData((duration) {
+    setState(() { _current = _start - duration.elapsed.inSeconds; });
+  });
+
+  sub.onDone(() {
+    _launchURL();
+    sub.cancel();
+  });
+}
   Widget build(BuildContext context) {
     return Scaffold(
       body: SwipeDetector(
@@ -51,11 +73,18 @@ class _callingMenuState extends State<callingMenu> {
             },
             onSwipeDown: () {
               vibrate();
-              _speakdown();
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>emergencyCall()));
-                // _swipeDirection = "Swipe Down";
-              });
+            //Timer(Duration(seconds: 3), () {
+            // print("Yeah, this line is printed after 3 seconds");
+            // });
+              for(int i=0;i<1;i++){
+                _speakdown();
+              }
+              startTimer();
+              // _launchURL();
+              // setState(() {
+              //   Navigator.push(context, MaterialPageRoute(builder: (context) =>));
+              //   // _swipeDirection = "Swipe Down";
+              // });
             },
             onSwipeLeft: () {
               vibrate();
@@ -83,4 +112,10 @@ class _callingMenuState extends State<callingMenu> {
       ),
     );
   }
+}
+_launchURL() async {
+  android_intent.Intent()
+    ..setAction(android_action.Action.ACTION_CALL)
+    ..setData(Uri(scheme: "tel", path: "9654058740"))  // Replace 12345678 with your tel. no.
+    ..startActivity().catchError((e) => print(e));
 }

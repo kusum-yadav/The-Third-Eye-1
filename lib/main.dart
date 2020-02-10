@@ -6,7 +6,13 @@ import 'callingMenu.dart';
 import 'camera.dart';
 import 'more.dart';
 import 'location.dart';
-Future<void> main() async{runApp(MyApp());}
+//import 'package:camera/camera.dart';
+Future<void> main() async{
+  //WidgetsFlutterBinding.ensureInitialized();
+  // final cameras = await availableCameras();
+  // final firstCamera = cameras.first;
+  runApp(MyApp());
+  }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -21,6 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  
   @override
   _MyHomePageState createState() =>new _MyHomePageState();
 }
@@ -66,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
               vibrate();
                _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>camera()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>opencamera()));//camera: cameras.first,
               });
             },
             onSwipeLeft: () {

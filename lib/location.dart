@@ -31,7 +31,7 @@ class _locationState extends State<location> {
       void sendsms(){
      SmsSender sender = new SmsSender();
   //String address = "9654058740";
-  List<String> x = ["9654014558", "9654058740", "9870681703"];
+  List<String> x = ["9654014558","9818709369","9205134917"];
   String address;
   for(var i in x){
     address=i;
@@ -47,7 +47,7 @@ class _locationState extends State<location> {
     await flutterTts.speak("home menu");
   }
   Future _speakright() async{
-    await flutterTts.speak("emergency location sent to Harshit Gupta");
+    await flutterTts.speak("emergency location sent");
   }
   Widget build(BuildContext context) {return Scaffold(
           body:new Container(
@@ -88,7 +88,7 @@ class _locationState extends State<location> {
                 sendsms();
                 _speakright();
                 setState(() {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>emergencyLocation()));
+                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>location()));
                   // _swipeDirection = "Swipe Right";
                 });
               },

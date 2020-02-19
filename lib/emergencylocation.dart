@@ -36,14 +36,14 @@ class _emergencyLocationState extends State<emergencyLocation> {
     await flutterTts.speak("home menu");
   }
   Future _speakright() async{
-    await flutterTts.speak("emergency location sent to Harshit Gupta");
+    await flutterTts.speak("emergency location sent");
   }
   Widget build(BuildContext context) {return Scaffold(
           body:new Container(
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n\n  Your Location \n\nLat:${currentLocation['latitude']}\nLng${currentLocation['longitude']}\n\n       Sent To\n  Harshit Gupta',style: TextStyle(
+            child: new Text('\n\n\n\n\n\n  Your Location \n\nLat:${currentLocation['latitude']}\nLng${currentLocation['longitude']}\n\n         Sent',style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
             ),),

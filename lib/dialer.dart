@@ -94,6 +94,7 @@ void startTimer() {
                 _speakdown();
 
               startTimer();
+              // _launchURL();
               setState(() {
                 // _swipeDirection = "Swipe Down";
               });
@@ -135,7 +136,7 @@ void startTimer() {
   _launchURL() async {
   android_intent.Intent()
     ..setAction(android_action.Action.ACTION_CALL)
-    ..setData(Uri(scheme: "tel", path: "$lastWords"))  // Replace 12345678 with your tel. no.
+    ..setData(Uri(scheme: "tel", path: "$lastWords"))  
     ..startActivity().catchError((e) => print(e));
 }
 }

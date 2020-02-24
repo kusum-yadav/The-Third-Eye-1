@@ -6,7 +6,16 @@ import 'callingMenu.dart';
 import 'camera.dart';
 import 'more.dart';
 import 'location.dart';
-Future<void> main() async{runApp(MyApp());}
+import 'package:camera/camera.dart';
+
+List<CameraDescription> cameras;
+
+Future<void> main() async{
+   WidgetsFlutterBinding.ensureInitialized();
+   cameras = await availableCameras();
+  // final firstCamera = cameras.first;
+  runApp(MyApp());
+  }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -14,13 +23,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
-      home: new MyHomePage(),
+      home: new MyHomePage(cameras),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  var cameras;
+  MyHomePage(this.cameras);
   @override
   _MyHomePageState createState() =>new _MyHomePageState();
 }
@@ -66,24 +77,24 @@ class _MyHomePageState extends State<MyHomePage> {
               vibrate();
                _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>camera()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>opencamera(widget.cameras)));
               });
             },
-            onSwipeLeft: () {
+        onSwipeLeft: () {
               vibrate();
                _speakleft();
               setState(() {
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>more()));
               });
             },
-            onSwipeRight: () {
+        onSwipeRight: () {
               vibrate();
                _speakright();
               setState(() {
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>location()));
               });
             },
-            swipeConfiguration: SwipeConfiguration(
+        swipeConfiguration: SwipeConfiguration(
         verticalSwipeMinVelocity: 100.0,
         verticalSwipeMinDisplacement: 50.0,
         verticalSwipeMaxWidthThreshold:100.0,

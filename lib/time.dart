@@ -37,7 +37,8 @@ class _timeState extends State<time> {
             });
         });
  }
-  Widget build(BuildContext context) {return Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
           body:new Container(
         child: SwipeDetector( 
           child: Container(

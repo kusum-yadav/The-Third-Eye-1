@@ -26,6 +26,9 @@ dependencies:
   intl: ^0.16.1
   location: ^1.3.4
   sms_maintained: ^0.2.5
+  camera:
+  intent:
+  speech_to_text: ^0.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,14 +1,43 @@
+import 'dart:async';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-class camera extends StatefulWidget {
+//import 'package:camera/camera.dart';
+
+class opencamera extends StatefulWidget {
+List<CameraDescription> cameras;
+opencamera(this.cameras);
+
   @override
-  _cameraState createState() => _cameraState();
+  _opencameraState createState() => _opencameraState();
 }
 
-class _cameraState extends State<camera> {
+class _opencameraState extends State<opencamera> {
+
+  CameraController controller;
+ 
   FlutterTts flutterTts=FlutterTts();
+ 
+  @override
+  void initState() {
+    super.initState();
+    controller=new CameraController(widget.cameras[0], ResolutionPreset.medium);
+    controller.initialize().then((_){
+      if(!mounted){
+        return;
+      }
+      setState(() { });
+    });  
+  }
+  @override
+  void dispose() {
+     controller?.dispose();
+    super.dispose();
+  }
+
   @override
   void vibrate()
   {
@@ -18,17 +47,15 @@ class _cameraState extends State<camera> {
     await flutterTts.speak("home menu");
   }
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SwipeDetector( 
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/comingsoon.jpg"),
-                  fit: BoxFit.cover,
-          ),
-        ),
-        ),
-            // child: Image.asset('assets/images/Home.jpg'),
+    if(!controller.value.isInitialized){
+      return new Container();
+    }
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
+      child: SwipeDetector( 
+      
+            child: new CameraPreview(controller) ,
+
             onSwipeUp: () {
               setState(() {
                 // _swipeDirection = "Swipe Up";

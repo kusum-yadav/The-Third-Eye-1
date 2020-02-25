@@ -32,6 +32,7 @@ class _dialerState extends State<dialer> {
   Future _speakdown() async{
     await flutterTts.speak("calling $lastWords");
   }
+    @override
     void initState() {
     super.initState();
     initSpeechState();

@@ -8,48 +8,68 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
 import 'package:quiver/async.dart';
+import 'dart:async';
+
 class contactList extends StatefulWidget {
   @override
   _contactListState createState() => _contactListState();
 }
 
 class _contactListState extends State<contactList> {
-  FlutterTts flutterTts=FlutterTts();
+  FlutterTts flutterTts = FlutterTts();
+  // startListening();
   @override
-  void vibrate()
-  {
-     Vibration.vibrate(pattern: [200, 100, 200, 100]);
+  void vibrate() {
+    Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-  Future _speakleft() async{
+
+  Future _speakleft() async {
     await flutterTts.speak("Calling menu");
+  }
+  Future _speakright() async {
+    await flutterTts.speak("calling $Name");
   }
   bool _hasSpeech = false;
   List<Contact> _contacts;
   final SpeechToText speech = SpeechToText();
-  String Name="";
-  // Retrive() async{
-  //   Iterable<Contact> Contacts=(await ContactsService.getContacts(query: Name)).toList();
-  //   setState(() {
-  //     _contacts=Contacts;
-  //   });  
-  // }
+  String Name = "";
+  List a;
+  int number;
+
+  Retrive() async {
+    
+    Iterable<Contact> Contacts =
+        (await ContactsService.getContacts(query: Name)).toList();
+    setState(() {
+      _contacts = Contacts;
+    });
+    Contact x = _contacts.elementAt(0);
+    // a=x.displayName;
+    a = x.phones.map((f) => f.value).toList();
+    // _launchURL();
+    startTimer();
+    // number=int.parse(a[0]);
+  }
+
   void startListening() {
     Name = "";
-    speech.listen(onResult: resultListener );
+    speech.listen(onResult: resultListener);
   }
-  void resultListener(SpeechRecognitionResult result){
-    setState(() async{
-      Iterable<Contact> Contacts=(await ContactsService.getContacts(query: "${result.recognizedWords} ")).toList();
-      _contacts=Contacts;
+
+  void resultListener(SpeechRecognitionResult result) {
+    setState(() {
+      Name = "${result.recognizedWords}";
+
       // Name = "${result.recognizedWords} ";//- ${result.finalResult}
     });
   }
-  
+
   @override
-  void initState(){
+  void initState() {
     initSpeechState();
     super.initState();
   }
+
   Future<void> initSpeechState() async {
     bool hasSpeech = await speech.initialize();
     setState(() {
@@ -57,93 +77,94 @@ class _contactListState extends State<contactList> {
     });
   }
 
-int _start = 4;
-int _current = 4;
+  int _start = 4;
+  int _current = 4;
 
-void startTimer() {
-  CountdownTimer countDownTimer = new CountdownTimer(
-    new Duration(seconds: _start),
-    new Duration(seconds: 1),
-  );
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: 2),
+      new Duration(seconds: 2),
+    );
 
-  var sub = countDownTimer.listen(null);
-  sub.onData((duration) {
-    setState(() { _current = _start - duration.elapsed.inSeconds; });
-  });
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
 
-  sub.onDone(() {
-    // _launchURL();
-    sub.cancel();
-  });
-}
+    sub.onDone(() {
+      _speakright();
+      Timer(Duration(seconds:2),(){
+        // Retrive();
+        _launchURL();
+      });
+      
 
+      sub.cancel();
+    });
+  }
 
-//   _launchURL() async {
-//   android_intent.Intent()
-//     ..setAction(android_action.Action.ACTION_CALL)
-//     ..setData(Uri(scheme: "tel", path: "$Number"))  
-//     ..startActivity().catchError((e) => print(e));
-// }
+  _launchURL() async {
+    android_intent.Intent()
+      ..setAction(android_action.Action.ACTION_CALL)
+      ..setData(Uri(scheme: "tel", path: "$a[0]"))
+      ..startActivity().catchError((e) => print(e));
+  }
 
 // Contact c= _contacts ?.elementAt(0);
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SwipeDetector( 
+      body: new Container(
+      child: SwipeDetector(
         child: Container(
-          child: _contacts!=null
-                ?ListView.builder(
-                  itemCount: _contacts?.length ?? 0,
-                  itemBuilder: (BuildContext context,int index){
-                    Contact c=_contacts ?.elementAt(index);
-                    Iterable<Item> x=c.phones;
-                    return ListTile(
-                        title:Text(c.displayName ?? ""),
-                    );
-                  }
-                  )
-                :Center(child:CircularProgressIndicator()),
-          color: Colors.yellow,
-        //   decoration: BoxDecoration(
-        //       image: DecorationImage(
-        //           image: AssetImage("assets/images/comingsoon.jpg"),
-        //           fit: BoxFit.cover,
-        //   ),
-        // ),
-        ),
-            // child: Image.asset('assets/images/Home.jpg'),
-            onSwipeUp: () {
-              setState(() {
-                // _swipeDirection = "Swipe Up";
-              });
-            },
-            onSwipeDown: () {
-              setState(() {
-                // _swipeDirection = "Swipe Down";
-              });
-            },
-            onSwipeLeft: () {
-              vibrate();
-              _speakleft();
-              setState(() {
-                 Navigator.pop(context);
-              });
-            },
-            onSwipeRight: () {
-              vibrate();
-              startListening();
-              setState(() {
-                // _swipeDirection = "Swipe Right";
-              });
-            },
-            swipeConfiguration: SwipeConfiguration(
-        verticalSwipeMinVelocity: 100.0,
-        verticalSwipeMinDisplacement: 50.0,
-        verticalSwipeMaxWidthThreshold:100.0,
-        horizontalSwipeMaxHeightThreshold: 50.0,
-        horizontalSwipeMinDisplacement:50.0,
-        horizontalSwipeMinVelocity: 200.0),
+            alignment: Alignment.bottomCenter,
+            child: new Text("\n\n$Name",style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            ),
+            ),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/Calling2.jpg"),
+                  fit: BoxFit.cover,
           ),
-        );
+        ),
+        ),
+        onSwipeDown: () {
+          setState(() {
+            // _swipeDirection = "Swipe Down";
+          });
+        },
+        onSwipeLeft: () {
+          vibrate();
+          _speakleft();
+          setState(() {
+            Navigator.pop(context);
+          });
+        },
+        onSwipeRight: () {
+          vibrate();
+          startListening();
+          // startTimer();
+          Timer(Duration(seconds:4),(){
+          Retrive();
+          // _launchURL();
+          });
+
+          setState(() {
+            // _swipeDirection = "Swipe Right";
+          });
+        },
+        swipeConfiguration: SwipeConfiguration(
+            verticalSwipeMinVelocity: 100.0,
+            verticalSwipeMinDisplacement: 50.0,
+            verticalSwipeMaxWidthThreshold: 100.0,
+            horizontalSwipeMaxHeightThreshold: 50.0,
+            horizontalSwipeMinDisplacement: 50.0,
+            horizontalSwipeMinVelocity: 200.0),
+      ),
+    ),);
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'callingMenu.dart';
+import 'callingnmessageMenu.dart';
 import 'camera.dart';
 import 'more.dart';
 import 'location.dart';
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
   Future _speakup() async{
-    await flutterTts.speak("Calling menu");
+    await flutterTts.speak("Calling And Messaging menu");
   }
   Future _speakdown() async{
     await flutterTts.speak("camera");
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           vibrate();
           _speakup();
           setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>callingMenu()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>callingnmessageMenu()));
           });
         },
         onSwipeDown: () {

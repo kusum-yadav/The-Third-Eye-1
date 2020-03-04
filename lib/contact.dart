@@ -4,19 +4,21 @@ import 'package:vibration/vibration.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
 import 'package:quiver/async.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
-class dialer extends StatefulWidget {
+class contact extends StatefulWidget {
   @override
-  _dialerState createState() => _dialerState();
+  _contactState createState() => _contactState();
 }
 
-class _dialerState extends State<dialer> {
+class _contactState extends State<contact> {
   FlutterTts flutterTts=FlutterTts();
   bool _hasSpeech = false;
   String lastWords = "";
+  List a;
   final SpeechToText speech = SpeechToText();
   @override
   void vibrate()
@@ -32,6 +34,20 @@ class _dialerState extends State<dialer> {
   Future _speakdown() async{
     await flutterTts.speak("calling $lastWords");
   }
+  List<Contact> _contacts;
+  // Retrive() async{
+  //   Iterable<Contact> Contacts=(await ContactsService.getContacts(query: lastWords)).toList();
+  
+  //   setState(() {
+  //     _contacts=Contacts;
+  //   });  
+  //   Contact x=Contacts ?. first ?? 0;
+  //             // print("object");
+  //             // flutterTts.speak(x.displayName);
+  //             // print(x.displayName);
+  //             a=x.phones.map((f)=>f.value).toList();
+
+  // }
     @override
     void initState() {
     super.initState();
@@ -68,15 +84,15 @@ void startTimer() {
       body: new Container(
       child: SwipeDetector(
         child: Container(
-            alignment: Alignment.topCenter,
-            child: new Text("\n\n\n\n\n\n\n\n\n\n\n$lastWords",style: TextStyle(
+            alignment: Alignment.center,
+            child: new Text("$a",style: TextStyle(
               fontSize: 50,
               fontWeight: FontWeight.bold,
             ),
             ),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/Calling2.jpg"),
+                  image: AssetImage("assets/images/blank.jpg"),
                   fit: BoxFit.cover,
           ),
         ),
@@ -110,6 +126,12 @@ void startTimer() {
             onSwipeRight: () {
               vibrate();
               startListening();//:print("speech recognition not available");
+              // int index;
+              // Contact c=_contacts ?.elementAt(index);
+              //       List x=c.phones.map((f)=>f.value).toList();
+              //           print(x[0]);
+              
+              
               setState(() {
                 // _swipeDirection = "Swipe Right";
               });
@@ -130,8 +152,17 @@ void startTimer() {
     speech.listen(onResult: resultListener );
   }
   void resultListener(SpeechRecognitionResult result) {
-    setState(() {
-      lastWords = "${result.recognizedWords} ";//- ${result.finalResult}
+    setState(() async{
+      Iterable<Contact> Contacts=(await ContactsService.getContacts(query: "${result.recognizedWords}")).toList();
+      Contact x=Contacts ?. first ?? 0;
+  //             // print("object");
+  //             // flutterTts.speak(x.displayName);
+  //             // print(x.displayName);
+              a=x.phones.map((f)=>f.value).toList();
+      // lastWords = "${result.recognizedWords} ";
+      // print(lastWords);
+      // Retrive();//- ${result.finalResult}
+      
     });
   }
   _launchURL() async {

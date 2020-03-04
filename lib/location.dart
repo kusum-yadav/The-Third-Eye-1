@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-import 'emergencylocation.dart';
+// import 'emergencylocation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
@@ -31,7 +31,7 @@ class _locationState extends State<location> {
       void sendsms(){
      SmsSender sender = new SmsSender();
   //String address = "9654058740";
-  List<String> x = ["9654014558","9818709369","9205134917"];
+  List<String> x = ["9654987144","9654058740"];
   String address;
   for(var i in x){
     address=i;

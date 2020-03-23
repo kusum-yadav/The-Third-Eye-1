@@ -28,8 +28,6 @@ class _batteryState extends State<battery> {
 
    _batteryState(){
    _batterypercentage().then((percent) {
-            // If we need to rebuild the widget with the resulting data,
-            // make sure to use `setState`
             setState(() {
                 _percent = percent;
             });

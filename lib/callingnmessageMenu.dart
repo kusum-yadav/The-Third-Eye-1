@@ -3,13 +3,11 @@ import 'package:swipedetector/swipedetector.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
-//import 'camera.dart';
 import 'package:quiver/async.dart';
 import 'package:the_third_eye/callingmenu.dart';
 import 'package:the_third_eye/message.dart';
 import 'callingmenu.dart';
 import 'message.dart';
-//import 'emergencyCall.dart';
 import 'package:vibration/vibration.dart';
 class callingnmessageMenu extends StatefulWidget {
   @override

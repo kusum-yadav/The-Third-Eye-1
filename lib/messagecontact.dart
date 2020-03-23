@@ -1,43 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-import 'package:the_third_eye/messagecontact.dart';
-import 'package:vibration/vibration.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'messagecontact.dart';
-import 'dart:async';
+import 'package:intent/intent.dart' as android_intent;
+import 'package:intent/action.dart' as android_action;
 import 'package:quiver/async.dart';
+import 'package:the_third_eye/callingmenu.dart';
+import 'package:the_third_eye/message.dart';
+import 'callingmenu.dart';
+import 'message.dart';
+import 'package:vibration/vibration.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
-
-class message extends StatefulWidget {
+class messagecontact extends StatefulWidget {
   @override
-  _messageState createState() => _messageState();
+  _messagecontactState createState() => _messagecontactState();
 }
 
-class _messageState extends State<message> {
-  FlutterTts flutterTts = FlutterTts();
+class _messagecontactState extends State<messagecontact> {
+  FlutterTts flutterTts=FlutterTts();
   bool _hasSpeech = false;
   String lastWords = "";
   final SpeechToText speech = SpeechToText();
   @override
-  void vibrate() {
-    Vibration.vibrate(pattern: [200, 100, 200, 100]);
+  void vibrate()
+  {
+    Vibration.vibrate(pattern: [200,100,200,100]);
   }
-
-
-  Future _speakleft() async {
-    await flutterTts.speak("calling and messaging menu");
+  Future _speakup() async{
+   await flutterTts.speak(lastWords);
+    }
+  Future _speakdown() async{
+    await flutterTts.speak("message sent");
   }
-
-  Future _speaknumber() async {
-    await flutterTts.speak(lastWords);
+  Future _speakleft() async{
+    await flutterTts.speak("messaging menu");
   }
-
-  Future _speakdown() async {
-    await flutterTts.speak("select contact");
-  }
-
-  @override
+@override
   void initState() {
     super.initState();
     initSpeechState();
@@ -87,7 +85,7 @@ class _messageState extends State<message> {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/message.jpg"),
+                image: AssetImage("assets/images/blank.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -95,7 +93,7 @@ class _messageState extends State<message> {
           // child: Image.asset('assets/images/Home.jpg'),
           onSwipeUp: () {
             vibrate();
-            _speaknumber();
+            _speakup();
             setState(() {
               // _swipeDirection = "Swipe Up";
             });
@@ -105,8 +103,7 @@ class _messageState extends State<message> {
             _speakdown();
             startTimer();
             setState(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => messagecontact()));
+              
               // _swipeDirection = "Swipe Down";
             });
           },

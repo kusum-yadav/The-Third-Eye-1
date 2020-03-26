@@ -17,7 +17,7 @@ class message extends StatefulWidget {
 class _messageState extends State<message> {
   FlutterTts flutterTts = FlutterTts();
   bool _hasSpeech = false;
-  String lastWords = "";
+  var lastWords = "";
   final SpeechToText speech = SpeechToText();
   @override
   void vibrate() {
@@ -106,7 +106,7 @@ class _messageState extends State<message> {
             startTimer();
             setState(() {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => messagecontact()));
+                  MaterialPageRoute(builder: (context) => messagecontact(lastWords)));
               // _swipeDirection = "Swipe Down";
             });
           },

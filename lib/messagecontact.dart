@@ -8,10 +8,13 @@ import 'package:the_third_eye/callingmenu.dart';
 import 'package:the_third_eye/message.dart';
 import 'callingmenu.dart';
 import 'message.dart';
+import 'package:sms_maintained/sms.dart';
 import 'package:vibration/vibration.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 class messagecontact extends StatefulWidget {
+  var a;
+  messagecontact(this.a);
   @override
   _messagecontactState createState() => _messagecontactState();
 }
@@ -21,6 +24,17 @@ class _messagecontactState extends State<messagecontact> {
   bool _hasSpeech = false;
   String lastWords = "";
   final SpeechToText speech = SpeechToText();
+  void sendsms(){
+     SmsSender sender = new SmsSender();
+  //String address = "9654058740";
+  List<String> x = ["9654014558","9654058740"];
+  String address;
+  //sender.sendSms(new SmsMessage("9654014558", widget.a));
+  for(var i in x){
+    address=i;
+  sender.sendSms(new SmsMessage(address, widget.a));
+  }
+  }
   @override
   void vibrate()
   {
@@ -30,7 +44,7 @@ class _messagecontactState extends State<messagecontact> {
    await flutterTts.speak(lastWords);
     }
   Future _speakdown() async{
-    await flutterTts.speak("message sent");
+    await flutterTts.speak(widget.a);
   }
   Future _speakleft() async{
     await flutterTts.speak("messaging menu");
@@ -102,6 +116,7 @@ class _messagecontactState extends State<messagecontact> {
             vibrate();
             _speakdown();
             startTimer();
+            sendsms();
             setState(() {
               
               // _swipeDirection = "Swipe Down";

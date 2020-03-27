@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-// import 'emergencylocation.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
@@ -16,6 +16,8 @@ class _locationState extends State<location> {
   Map<String,double> currentLocation=new Map();
   StreamSubscription<Map<String,double>> locationSubscription;
   Location location=new Location();
+  var addresses;
+
   void initState(){
     super.initState();
     currentLocation['latitude'] = 0.0;
@@ -23,14 +25,17 @@ class _locationState extends State<location> {
     
     initPlatformState();
     locationSubscription=location.onLocationChanged().listen((Map<String,double>result){
-      setState(() {
+      setState(() async{
         currentLocation=result;
+        addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(currentLocation["latitude"], currentLocation["longitude"]));
+        print(addresses);
       });
     }); 
       }
+  
       void sendsms(){
      SmsSender sender = new SmsSender();
-  //String address = "9654058740";
+
   List<String> x = ["9654987144","9654058740"];
   String address;
   for(var i in x){

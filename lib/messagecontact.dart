@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:intent/intent.dart' as android_intent;
-import 'package:intent/action.dart' as android_action;
-import 'package:quiver/async.dart';
-import 'package:the_third_eye/callingmenu.dart';
-import 'package:the_third_eye/message.dart';
-import 'callingmenu.dart';
-import 'message.dart';
 import 'package:sms_maintained/sms.dart';
 import 'package:vibration/vibration.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'dart:async';
+
 class messagecontact extends StatefulWidget {
   var a;
   messagecontact(this.a);
@@ -20,36 +16,32 @@ class messagecontact extends StatefulWidget {
 }
 
 class _messagecontactState extends State<messagecontact> {
-  FlutterTts flutterTts=FlutterTts();
+  FlutterTts flutterTts = FlutterTts();
   bool _hasSpeech = false;
+  List Name;
+  Contact x;
+  String _name;
   String lastWords = "";
   final SpeechToText speech = SpeechToText();
-  void sendsms(){
-     SmsSender sender = new SmsSender();
-  //String address = "9654058740";
-  List<String> x = ["9654014558","9654058740"];
-  String address;
-  //sender.sendSms(new SmsMessage("9654014558", widget.a));
-  for(var i in x){
-    address=i;
-  sender.sendSms(new SmsMessage(address, widget.a));
-  }
-  }
+
   @override
-  void vibrate()
-  {
-    Vibration.vibrate(pattern: [200,100,200,100]);
+  void vibrate() {
+    Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-  Future _speakup() async{
-   await flutterTts.speak(lastWords);
-    }
-  Future _speakdown() async{
-    await flutterTts.speak(widget.a);
+
+  Future _speakup() async {
+    await flutterTts.speak("$_name");
   }
-  Future _speakleft() async{
+
+  Future _speakdown() async {
+    await flutterTts.speak("Messsage sent to ");
+  }
+
+  Future _speakleft() async {
     await flutterTts.speak("messaging menu");
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     initSpeechState();
@@ -62,27 +54,23 @@ class _messagecontactState extends State<messagecontact> {
     });
   }
 
-  int _start = 4;
-  int _current = 4;
+  List<Contact> _contacts;
 
-  void startTimer() {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
-      new Duration(seconds: 1),
-    );
-
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        _current = _start - duration.elapsed.inSeconds;
-      });
+  Retrive() async {
+    Iterable<Contact> Contacts =(await ContactsService.getContacts(query: "Harshit")).toList();
+    setState(() {
+      _contacts = Contacts;
+      print(_contacts);
     });
-
-    sub.onDone(() {
-      _launchURL();
-      sub.cancel();
-    });
+    x = _contacts.elementAt(0);
+    _name=x.displayName;
+    Name = x.phones.map((f) => f.value).toList();
+    // print(Name);
+    SmsSender sender = new SmsSender();
+    sender.sendSms(new SmsMessage(Name[0], widget.a));
   }
+
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,22 +92,23 @@ class _messagecontactState extends State<messagecontact> {
               ),
             ),
           ),
-          // child: Image.asset('assets/images/Home.jpg'),
           onSwipeUp: () {
             vibrate();
             _speakup();
             setState(() {
-              // _swipeDirection = "Swipe Up";
             });
           },
           onSwipeDown: () {
             vibrate();
             _speakdown();
-            startTimer();
-            sendsms();
+
+            Timer(Duration(seconds: 4), () {
+              Retrive();
+
+            });
+
             setState(() {
-              
-              // _swipeDirection = "Swipe Down";
+
             });
           },
           onSwipeLeft: () {
@@ -133,7 +122,7 @@ class _messagecontactState extends State<messagecontact> {
             vibrate();
             startListening();
             setState(() {
-              // _swipeDirection = "Swipe Right";
+
             });
           },
           swipeConfiguration: SwipeConfiguration(
@@ -159,5 +148,4 @@ class _messagecontactState extends State<messagecontact> {
     });
   }
 
-  _launchURL() async {}
 }

@@ -7,7 +7,6 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:intent/intent.dart' as android_intent;
 import 'package:intent/action.dart' as android_action;
-import 'package:quiver/async.dart';
 import 'dart:async';
 
 class contactList extends StatefulWidget {
@@ -17,6 +16,7 @@ class contactList extends StatefulWidget {
 
 class _contactListState extends State<contactList> {
   FlutterTts flutterTts = FlutterTts();
+  var _callnum;
   // startListening();
   @override
   void vibrate() {
@@ -34,7 +34,7 @@ class _contactListState extends State<contactList> {
   final SpeechToText speech = SpeechToText();
   String Name = "";
   List a;
-  int number;
+  // int number;
 
   Retrive() async {
     
@@ -47,7 +47,12 @@ class _contactListState extends State<contactList> {
     // a=x.displayName;
     a = x.phones.map((f) => f.value).toList();
     // _launchURL();
-    startTimer();
+    _speakright();
+    Timer(Duration(seconds:2),(){
+         _callnum=a[0];
+        _launchURL();
+      });
+    // startTimer();
     // number=int.parse(a[0]);
   }
 
@@ -77,38 +82,10 @@ class _contactListState extends State<contactList> {
     });
   }
 
-  int _start = 4;
-  int _current = 4;
-
-  void startTimer() {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: 2),
-      new Duration(seconds: 2),
-    );
-
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        _current = _start - duration.elapsed.inSeconds;
-      });
-    });
-
-    sub.onDone(() {
-      _speakright();
-      Timer(Duration(seconds:2),(){
-        // Retrive();
-        _launchURL();
-      });
-      
-
-      sub.cancel();
-    });
-  }
-
   _launchURL() async {
     android_intent.Intent()
       ..setAction(android_action.Action.ACTION_CALL)
-      ..setData(Uri(scheme: "tel", path: "$a[0]"))
+      ..setData(Uri(scheme: "tel", path: "$_callnum"))
       ..startActivity().catchError((e) => print(e));
   }
 

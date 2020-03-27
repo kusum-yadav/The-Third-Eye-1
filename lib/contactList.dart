@@ -133,6 +133,11 @@ class _contactListState extends State<contactList> {
         ),
         ),
         onSwipeDown: () {
+          vibrate();
+          Timer(Duration(seconds:4),(){
+          Retrive();
+          // _launchURL();
+          });
           setState(() {
             // _swipeDirection = "Swipe Down";
           });
@@ -148,10 +153,7 @@ class _contactListState extends State<contactList> {
           vibrate();
           startListening();
           // startTimer();
-          Timer(Duration(seconds:4),(){
-          Retrive();
-          // _launchURL();
-          });
+          
 
           setState(() {
             // _swipeDirection = "Swipe Right";

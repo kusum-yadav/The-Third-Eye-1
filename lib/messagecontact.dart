@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:intent/intent.dart' as android_intent;
-import 'package:intent/action.dart' as android_action;
-import 'package:quiver/async.dart';
-import 'package:the_third_eye/callingmenu.dart';
-import 'package:the_third_eye/message.dart';
-import 'callingmenu.dart';
-import 'message.dart';
 import 'package:sms_maintained/sms.dart';
 import 'package:vibration/vibration.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'dart:async';
+
 class messagecontact extends StatefulWidget {
   var a;
   messagecontact(this.a);
@@ -20,39 +16,61 @@ class messagecontact extends StatefulWidget {
 }
 
 class _messagecontactState extends State<messagecontact> {
-  FlutterTts flutterTts=FlutterTts();
-  bool _hasSpeech = false;
-  String lastWords = "";
-  final SpeechToText speech = SpeechToText();
-  void sendsms(){
-     SmsSender sender = new SmsSender();
-  //String address = "9654058740";
-  List<String> x = ["9654014558","9654058740"];
-  String address;
-  //sender.sendSms(new SmsMessage("9654014558", widget.a));
-  for(var i in x){
-    address=i;
-  sender.sendSms(new SmsMessage(address, widget.a));
-  }
-  }
+  FlutterTts flutterTts = FlutterTts();
+  // startListening();
   @override
-  void vibrate()
-  {
-    Vibration.vibrate(pattern: [200,100,200,100]);
+  void vibrate() {
+    Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-  Future _speakup() async{
-   await flutterTts.speak(lastWords);
-    }
-  Future _speakdown() async{
-    await flutterTts.speak(widget.a);
+Future _speakup() async {
+    await flutterTts.speak("$Name");
   }
-  Future _speakleft() async{
-    await flutterTts.speak("messaging menu");
+
+  Future _speakleft() async {
+    await flutterTts.speak("Calling menu");
   }
-@override
+
+  Future _speakdown() async {
+    await flutterTts.speak("message sent to $Name");
+  }
+
+  bool _hasSpeech = false;
+  List<Contact> _contacts;
+  final SpeechToText speech = SpeechToText();
+  String Name = "";
+  List a;
+  int number;
+
+  Retrive() async {
+    Iterable<Contact> Contacts =
+        (await ContactsService.getContacts(query: Name)).toList();
+    setState(() {
+      for (var i in Contacts) {
+        print(i.phones.map((f) => f.value).toList());
+      }
+      _contacts = Contacts;
+    });
+    Contact x = _contacts.elementAt(0);
+    a = x.phones.map((f) => f.value).toList();
+    SmsSender sender = new SmsSender();
+    sender.sendSms(new SmsMessage(a[0], widget.a));
+  }
+
+  void startListening() {
+    Name = "";
+    speech.listen(onResult: resultListener);
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    setState(() {
+      Name = "${result.recognizedWords}";
+    });
+  }
+
+  @override
   void initState() {
-    super.initState();
     initSpeechState();
+    super.initState();
   }
 
   Future<void> initSpeechState() async {
@@ -62,28 +80,7 @@ class _messagecontactState extends State<messagecontact> {
     });
   }
 
-  int _start = 4;
-  int _current = 4;
-
-  void startTimer() {
-    CountdownTimer countDownTimer = new CountdownTimer(
-      new Duration(seconds: _start),
-      new Duration(seconds: 1),
-    );
-
-    var sub = countDownTimer.listen(null);
-    sub.onData((duration) {
-      setState(() {
-        _current = _start - duration.elapsed.inSeconds;
-      });
-    });
-
-    sub.onDone(() {
-      _launchURL();
-      sub.cancel();
-    });
-  }
-
+ 
   Widget build(BuildContext context) {
     return Scaffold(
       body: new Container(
@@ -91,34 +88,34 @@ class _messagecontactState extends State<messagecontact> {
           child: Container(
             alignment: Alignment.bottomCenter,
             child: new Text(
-              "$lastWords",
+              "\n\n$Name",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 50,
                 fontWeight: FontWeight.bold,
               ),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/blank.jpg"),
+                image: AssetImage("assets/images/Calling2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // child: Image.asset('assets/images/Home.jpg'),
           onSwipeUp: () {
             vibrate();
             _speakup();
             setState(() {
-              // _swipeDirection = "Swipe Up";
+              
             });
           },
           onSwipeDown: () {
             vibrate();
             _speakdown();
-            startTimer();
-            sendsms();
+            Timer(Duration(seconds: 4), () {
+              Retrive();
+              // _launchURL();
+            });
             setState(() {
-              
               // _swipeDirection = "Swipe Down";
             });
           },
@@ -132,6 +129,8 @@ class _messagecontactState extends State<messagecontact> {
           onSwipeRight: () {
             vibrate();
             startListening();
+            // startTimer();
+
             setState(() {
               // _swipeDirection = "Swipe Right";
             });
@@ -147,17 +146,4 @@ class _messagecontactState extends State<messagecontact> {
       ),
     );
   }
-
-  void startListening() {
-    lastWords = "";
-    speech.listen(onResult: resultListener);
-  }
-
-  void resultListener(SpeechRecognitionResult result) {
-    setState(() {
-      lastWords = "${result.recognizedWords} "; //- ${result.finalResult}
-    });
-  }
-
-  _launchURL() async {}
 }

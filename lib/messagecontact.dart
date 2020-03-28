@@ -17,34 +17,60 @@ class messagecontact extends StatefulWidget {
 
 class _messagecontactState extends State<messagecontact> {
   FlutterTts flutterTts = FlutterTts();
-  bool _hasSpeech = false;
-  List Name;
-  Contact x;
-  String _name;
-  String lastWords = "";
-  final SpeechToText speech = SpeechToText();
-
+  // startListening();
   @override
   void vibrate() {
     Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-
-  Future _speakup() async {
-    await flutterTts.speak("$_name");
-  }
-
-  Future _speakdown() async {
-    await flutterTts.speak("Messsage sent to ");
+Future _speakup() async {
+    await flutterTts.speak("$Name");
   }
 
   Future _speakleft() async {
-    await flutterTts.speak("messaging menu");
+    await flutterTts.speak("Calling menu");
+  }
+
+  Future _speakdown() async {
+    await flutterTts.speak("message sent to $Name");
+  }
+
+  bool _hasSpeech = false;
+  List<Contact> _contacts;
+  final SpeechToText speech = SpeechToText();
+  String Name = "";
+  List a;
+  int number;
+
+  Retrive() async {
+    Iterable<Contact> Contacts =
+        (await ContactsService.getContacts(query: Name)).toList();
+    setState(() {
+      for (var i in Contacts) {
+        print(i.phones.map((f) => f.value).toList());
+      }
+      _contacts = Contacts;
+    });
+    Contact x = _contacts.elementAt(0);
+    a = x.phones.map((f) => f.value).toList();
+    SmsSender sender = new SmsSender();
+    sender.sendSms(new SmsMessage(a[0], widget.a));
+  }
+
+  void startListening() {
+    Name = "";
+    speech.listen(onResult: resultListener);
+  }
+
+  void resultListener(SpeechRecognitionResult result) {
+    setState(() {
+      Name = "${result.recognizedWords}";
+    });
   }
 
   @override
   void initState() {
-    super.initState();
     initSpeechState();
+    super.initState();
   }
 
   Future<void> initSpeechState() async {
@@ -54,24 +80,7 @@ class _messagecontactState extends State<messagecontact> {
     });
   }
 
-  List<Contact> _contacts;
-
-  Retrive() async {
-    Iterable<Contact> Contacts =(await ContactsService.getContacts(query: "Harshit")).toList();
-    setState(() {
-      _contacts = Contacts;
-      print(_contacts);
-    });
-    x = _contacts.elementAt(0);
-    _name=x.displayName;
-    Name = x.phones.map((f) => f.value).toList();
-    // print(Name);
-    SmsSender sender = new SmsSender();
-    sender.sendSms(new SmsMessage(Name[0], widget.a));
-  }
-
-
-
+ 
   Widget build(BuildContext context) {
     return Scaffold(
       body: new Container(
@@ -79,15 +88,15 @@ class _messagecontactState extends State<messagecontact> {
           child: Container(
             alignment: Alignment.bottomCenter,
             child: new Text(
-              "$lastWords",
+              "\n\n$Name",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 50,
                 fontWeight: FontWeight.bold,
               ),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/blank.jpg"),
+                image: AssetImage("assets/images/Calling2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -96,19 +105,18 @@ class _messagecontactState extends State<messagecontact> {
             vibrate();
             _speakup();
             setState(() {
+              
             });
           },
           onSwipeDown: () {
             vibrate();
             _speakdown();
-
             Timer(Duration(seconds: 4), () {
               Retrive();
-
+              // _launchURL();
             });
-
             setState(() {
-
+              // _swipeDirection = "Swipe Down";
             });
           },
           onSwipeLeft: () {
@@ -121,8 +129,10 @@ class _messagecontactState extends State<messagecontact> {
           onSwipeRight: () {
             vibrate();
             startListening();
-            setState(() {
+            // startTimer();
 
+            setState(() {
+              // _swipeDirection = "Swipe Right";
             });
           },
           swipeConfiguration: SwipeConfiguration(
@@ -136,16 +146,4 @@ class _messagecontactState extends State<messagecontact> {
       ),
     );
   }
-
-  void startListening() {
-    lastWords = "";
-    speech.listen(onResult: resultListener);
-  }
-
-  void resultListener(SpeechRecognitionResult result) {
-    setState(() {
-      lastWords = "${result.recognizedWords} "; //- ${result.finalResult}
-    });
-  }
-
 }

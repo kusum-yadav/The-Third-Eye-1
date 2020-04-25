@@ -21,13 +21,18 @@ class _calenderState extends State<calender> {
   Future _speakleft() async{
     await flutterTts.speak("more menu");
   }
+  
   Future<String> _dateandtime() async{
     DateTime now = DateTime.now();
-   String formatedDate = DateFormat('    EEEE\n d MMMM\n      y').format(now);
+   String formatedDate = DateFormat(' EEEE\n d MMMM\n  y').format(now);
     // var battery = Battery();
     // final int percent =await battery.batteryLevel;
     return formatedDate;
   }
+  Future _speakup() async{
+
+  await flutterTts.speak("Today's Date is "+_formatedDate);
+    }
 
    _calenderState(){
    _dateandtime().then((date) {
@@ -57,6 +62,8 @@ class _calenderState extends State<calender> {
           ),
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
+                _speakup();
+                vibrate();
                 setState(() {
                   // _swipeDirection = "Swipe Up";
                 });

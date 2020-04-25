@@ -22,7 +22,9 @@ class _contactListState extends State<contactList> {
   void vibrate() {
     Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-
+Future _speakup() async {
+    await flutterTts.speak("$Name");
+  }
   Future _speakleft() async {
     await flutterTts.speak("Calling menu");
   }
@@ -110,9 +112,13 @@ class _contactListState extends State<contactList> {
         ),
         ),
         onSwipeDown: () {
+          Retrive();
           setState(() {
             // _swipeDirection = "Swipe Down";
           });
+        },
+        onSwipeUp: (){
+          _speakup();
         },
         onSwipeLeft: () {
           vibrate();
@@ -125,10 +131,10 @@ class _contactListState extends State<contactList> {
           vibrate();
           startListening();
           // startTimer();
-          Timer(Duration(seconds:4),(){
-          Retrive();
-          // _launchURL();
-          });
+          // Timer(Duration(seconds:4),(){
+          // Retrive();
+          // // _launchURL();
+          // });
 
           setState(() {
             // _swipeDirection = "Swipe Right";

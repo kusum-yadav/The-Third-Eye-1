@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-// import 'emergencylocation.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
@@ -16,6 +16,9 @@ class _locationState extends State<location> {
   Map<String,double> currentLocation=new Map();
   StreamSubscription<Map<String,double>> locationSubscription;
   Location location=new Location();
+  var addresses;
+  var first;
+  String finalAdd;
   void initState(){
     super.initState();
     currentLocation['latitude'] = 0.0;
@@ -23,14 +26,19 @@ class _locationState extends State<location> {
     
     initPlatformState();
     locationSubscription=location.onLocationChanged().listen((Map<String,double>result){
-      setState(() {
+      setState(() async{
         currentLocation=result;
+        addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(currentLocation["latitude"], currentLocation["longitude"]));
+        first=addresses.first;
+        finalAdd=first.addressLine;
+        print('$finalAdd');
       });
     }); 
       }
+  
       void sendsms(){
      SmsSender sender = new SmsSender();
-  //String address = "9654058740";
+
   List<String> x = ["9654987144","9654058740"];
   String address;
   for(var i in x){
@@ -49,12 +57,15 @@ class _locationState extends State<location> {
   Future _speakright() async{
     await flutterTts.speak("emergency location sent");
   }
+  Future _speakUp() async{
+    await flutterTts.speak(first.addressLine);
+  }
   Widget build(BuildContext context) {return Scaffold(
           body:new Container(
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n     Your Location Is\nLatitude:-${currentLocation['latitude']}\nLongitude:-${currentLocation['longitude']}',style: TextStyle(
+            child: new Text('\n\n\n     Your Location Is $finalAdd',style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),),
@@ -68,7 +79,7 @@ class _locationState extends State<location> {
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
                 setState(() {
-                  // _swipeDirection = "Swipe Up";
+                  _speakUp();
                 });
               },
               onSwipeDown: () {

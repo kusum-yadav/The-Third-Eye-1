@@ -17,7 +17,8 @@ class _locationState extends State<location> {
   StreamSubscription<Map<String,double>> locationSubscription;
   Location location=new Location();
   var addresses;
-
+  var first;
+  String finalAdd;
   void initState(){
     super.initState();
     currentLocation['latitude'] = 0.0;
@@ -28,7 +29,9 @@ class _locationState extends State<location> {
       setState(() async{
         currentLocation=result;
         addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(currentLocation["latitude"], currentLocation["longitude"]));
-        print(addresses);
+        first=addresses.first;
+        finalAdd=first.addressLine;
+        print('$finalAdd');
       });
     }); 
       }
@@ -54,12 +57,15 @@ class _locationState extends State<location> {
   Future _speakright() async{
     await flutterTts.speak("emergency location sent");
   }
+  Future _speakUp() async{
+    await flutterTts.speak(first.addressLine);
+  }
   Widget build(BuildContext context) {return Scaffold(
           body:new Container(
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n     Your Location Is\nLatitude:-${currentLocation['latitude']}\nLongitude:-${currentLocation['longitude']}',style: TextStyle(
+            child: new Text('\n\n\n     Your Location Is $finalAdd',style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),),
@@ -73,7 +79,7 @@ class _locationState extends State<location> {
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
                 setState(() {
-                  // _swipeDirection = "Swipe Up";
+                  _speakUp();
                 });
               },
               onSwipeDown: () {

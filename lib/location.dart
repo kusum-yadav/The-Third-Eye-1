@@ -65,7 +65,7 @@ class _locationState extends State<location> {
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n     Your Location Is $finalAdd',style: TextStyle(
+            child: new Text('\n\n\n     Your Location is $finalAdd',style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),),

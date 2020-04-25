@@ -31,7 +31,7 @@ class _calenderState extends State<calender> {
   }
   Future _speakup() async{
 
-  await flutterTts.speak("Today's Date is "+_formatedDate);
+  await flutterTts.speak("Today is "+_formatedDate);
     }
 
    _calenderState(){
@@ -52,7 +52,7 @@ class _calenderState extends State<calender> {
               fontSize: 50,
               fontWeight: FontWeight.bold,
 
-            ),),
+            ),textAlign: TextAlign.center,),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/images/date.jpg"),

@@ -23,7 +23,7 @@ class _moreState extends State<more> {
   //  await flutterTts.speak("today's date");
    DateTime now = DateTime.now();
    String formattedDate = DateFormat('EEEE\n d MMMM\n y').format(now);
-  await flutterTts.speak("Today's Date is "+formattedDate);
+  await flutterTts.speak("Today is "+formattedDate);
     }
   Future _speakdown() async{
     //  await flutterTts.speak("Current time");

@@ -76,8 +76,8 @@ class _locationState extends State<location> {
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n\nYou are at\n$hno, $area,\n$city, $state1,\nIndia',style: TextStyle(
-              fontSize: 24,
+            child: new Text('\n\nYou are at\n$hno, $area,\n$city, $state1,\nIndia',style: TextStyle(
+              fontSize: 28,
               fontWeight: FontWeight.bold,
             ),textAlign: TextAlign.center,
             ),

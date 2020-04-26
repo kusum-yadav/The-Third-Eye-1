@@ -49,7 +49,7 @@ class _calenderState extends State<calender> {
           child: Container(
             alignment: Alignment.center,
             child: new Text("$_formatedDate",style: TextStyle(
-              fontSize: 50,
+              fontSize: 60,
               fontWeight: FontWeight.bold,
 
             ),textAlign: TextAlign.center,),

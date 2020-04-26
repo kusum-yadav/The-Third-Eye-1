@@ -91,7 +91,7 @@ Future _speakup() async {
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
-              ),
+              ),textAlign: TextAlign.center,
             ),
             decoration: BoxDecoration(
               image: DecorationImage(

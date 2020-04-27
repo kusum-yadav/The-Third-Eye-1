@@ -29,7 +29,7 @@ class _messageState extends State<message> {
     await flutterTts.speak("calling and messaging menu");
   }
 
-  Future _speaknumber() async {
+  Future _speakup() async {
     await flutterTts.speak(lastWords);
   }
 
@@ -81,13 +81,13 @@ class _messageState extends State<message> {
             child: new Text(
               "$lastWords",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
-              ),
+              ),textAlign: TextAlign.center,
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/message.jpg"),
+                image: AssetImage("assets/images/message1.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -95,7 +95,7 @@ class _messageState extends State<message> {
           // child: Image.asset('assets/images/Home.jpg'),
           onSwipeUp: () {
             vibrate();
-            _speaknumber();
+            _speakup();
             setState(() {
               // _swipeDirection = "Swipe Up";
             });

@@ -87,15 +87,15 @@ Future _speakup() async {
           child: Container(
             alignment: Alignment.bottomCenter,
             child: new Text(
-              "\n\n$Name",
+              "$Name\n",
               style: TextStyle(
                 fontSize: 50,
                 fontWeight: FontWeight.bold,
-              ),
+              ),textAlign: TextAlign.center,
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/Calling2.jpg"),
+                image: AssetImage("assets/images/message.jpg"),
                 fit: BoxFit.cover,
               ),
             ),

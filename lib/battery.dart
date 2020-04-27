@@ -25,6 +25,18 @@ class _batteryState extends State<battery> {
     final int percent =await battery.batteryLevel;
     return percent;
   }
+  Future<int> _speakup() async{
+    var battery = Battery();
+    final int percent =await battery.batteryLevel;
+    String batterystring=percent.toString();
+  int batteryint=int.parse(batterystring);
+   if(batteryint<=15){
+     flutterTts.speak("$batteryint percent battery left, please! charge your phone");
+   }
+   else{
+     flutterTts.speak("$batteryint percent battery left");
+   }
+  }
 
    _batteryState(){
    _batterypercentage().then((percent) {
@@ -53,6 +65,8 @@ class _batteryState extends State<battery> {
           ),
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
+                _speakup();
+                vibrate();
                 setState(() {
                   // _swipeDirection = "Swipe Up";
                 });

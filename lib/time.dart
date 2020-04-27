@@ -15,13 +15,17 @@ class _timeState extends State<time> {
   {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);
   }
-  var _formatedtime;
+
   Future _speakleft() async{
     await flutterTts.speak("more menu");
   }
+   var _formatedtime;
   Future<String> _dateandtime() async{
     DateTime now = DateTime.now();
    String formatedtime = DateFormat('jm').format(now);
+
+
+  
     // var battery = Battery();
     // final int percent =await battery.batteryLevel;
     print(formatedtime);
@@ -56,6 +60,8 @@ class _timeState extends State<time> {
           ),
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
+                flutterTts.speak('$_formatedtime');
+                vibrate();
                 setState(() {
                   // _swipeDirection = "Swipe Up";
                 });

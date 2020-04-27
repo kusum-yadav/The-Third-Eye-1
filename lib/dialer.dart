@@ -68,11 +68,11 @@ void startTimer() {
       body: new Container(
       child: SwipeDetector(
         child: Container(
-            alignment: Alignment.topCenter,
-            child: new Text("\n\n\n\n\n\n\n\n\n\n\n$lastWords",style: TextStyle(
-              fontSize: 50,
+            alignment: Alignment.bottomCenter,
+            child: new Text("$lastWords\n",style: TextStyle(
+              fontSize: 52,
               fontWeight: FontWeight.bold,
-            ),
+            ),textAlign: TextAlign.center,
             ),
           decoration: BoxDecoration(
               image: DecorationImage(

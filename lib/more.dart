@@ -7,6 +7,7 @@ import 'battery.dart';
 import 'time.dart';
 import 'package:vibration/vibration.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
 class more extends StatefulWidget {
   @override
   _moreState createState() => _moreState();
@@ -22,8 +23,8 @@ class _moreState extends State<more> {
   Future _speakup() async{
   //  await flutterTts.speak("today's date");
    DateTime now = DateTime.now();
-   String formattedDate = DateFormat('E d MMM y').format(now);
-  await flutterTts.speak("Today's Date is "+formattedDate);
+   String formattedDate = DateFormat('EEEE\n d MMMM\n y').format(now);
+  await flutterTts.speak("Today is "+formattedDate);
     }
   Future _speakdown() async{
     //  await flutterTts.speak("Current time");
@@ -39,7 +40,15 @@ class _moreState extends State<more> {
     final int percent =await battery.batteryLevel;
     // String bp= battery.batteryLevel.toString();
   //  print(percent);
-   flutterTts.speak(percent.toString()+" percent");
+
+  String batterystring=percent.toString();
+  int batteryint=int.parse(batterystring);
+   if(batteryint<=15){
+     flutterTts.speak("$batteryint percent battery left, please! charge your phone");
+   }
+   else{
+     flutterTts.speak("$batteryint percent battery left");
+   }
   }
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swipedetector/swipedetector.dart';
-// import 'emergencylocation.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
@@ -16,6 +16,13 @@ class _locationState extends State<location> {
   Map<String,double> currentLocation=new Map();
   StreamSubscription<Map<String,double>> locationSubscription;
   Location location=new Location();
+  var addresses;
+  var first;
+  String finalAdd;
+  String hno;
+  String area;
+  String city;
+  String state1;
   void initState(){
     super.initState();
     currentLocation['latitude'] = 0.0;
@@ -23,22 +30,34 @@ class _locationState extends State<location> {
     
     initPlatformState();
     locationSubscription=location.onLocationChanged().listen((Map<String,double>result){
-      setState(() {
+      setState(() async{
         currentLocation=result;
+        addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(currentLocation["latitude"], currentLocation["longitude"]));
+        first=addresses.first;
+        finalAdd=first.addressLine;
+        hno=first.featureName;
+        area=first.subLocality;
+        city=first.subAdminArea;
+        state1=first.adminArea;
+        print("------------ $hno $area $city $state1");
+        print(first.addressLine);
+
       });
     }); 
       }
+  
       void sendsms(){
      SmsSender sender = new SmsSender();
-  //String address = "9654058740";
-  List<String> x = ["9654987144","9654058740"];
+  List<String> x = ["9654014558","9654058740"];
   String address;
   for(var i in x){
     address=i;
-  sender.sendSms(new SmsMessage(address, 'I need help\nPlease track me, I am here:- https://www.google.com/maps/place/${currentLocation['latitude']},${currentLocation['longitude']}'));
+  sender.sendSms(new SmsMessage(address, 'I NEED HELP\nI am here:\nHouse No.- $hno\nArea- $area\nCity- $city\nState- $state1 '));
+  sender.sendSms(new SmsMessage(address, 'Please track me- https://www.google.com/maps/place/${currentLocation['latitude']},${currentLocation['longitude']}'));
+  
   }}
       String error;
-  @override
+ 
   void vibrate()
   {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);
@@ -49,15 +68,19 @@ class _locationState extends State<location> {
   Future _speakright() async{
     await flutterTts.speak("emergency location sent");
   }
+  Future _speakUp() async{
+    await flutterTts.speak("you are at, $hno, $area, $city, $state1, India");
+  }
   Widget build(BuildContext context) {return Scaffold(
           body:new Container(
         child: SwipeDetector( 
           child: Container(
             alignment: Alignment.topCenter,
-            child: new Text('\n\n\n     Your Location Is\nLatitude:-${currentLocation['latitude']}\nLongitude:-${currentLocation['longitude']}',style: TextStyle(
-              fontSize: 30,
+            child: new Text('\n\nYou are at\n$hno, $area,\n$city, $state1,\nIndia',style: TextStyle(
+              fontSize: 28,
               fontWeight: FontWeight.bold,
-            ),),
+            ),textAlign: TextAlign.center,
+            ),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/images/location.jpg"),
@@ -68,7 +91,8 @@ class _locationState extends State<location> {
               // child: Image.asset('assets/images/Home.jpg'),
               onSwipeUp: () {
                 setState(() {
-                  // _swipeDirection = "Swipe Up";
+                  _speakUp();
+                  vibrate();
                 });
               },
               onSwipeDown: () {

@@ -99,10 +99,10 @@ Future _speakup() async {
       child: SwipeDetector(
         child: Container(
             alignment: Alignment.bottomCenter,
-            child: new Text("\n\n$Name",style: TextStyle(
+            child: new Text("$Name\n",style: TextStyle(
               fontSize: 50,
               fontWeight: FontWeight.bold,
-            ),
+            ),textAlign: TextAlign.center,
             ),
           decoration: BoxDecoration(
               image: DecorationImage(

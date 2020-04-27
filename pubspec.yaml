@@ -31,6 +31,7 @@ dependencies:
   speech_to_text: ^0.8.0
   contacts_service:
   geocoder: ^0.2.1
+  tflite: 1.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,6 +41,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.7.3"
+  
 
 flutter_icons:
   android: "launcher_icon" 
@@ -73,6 +75,14 @@ flutter:
     - assets/images/callnmsg.jpg
     - assets/images/message.jpg
     - assets/images/message1.jpg
+    - assets/models/yolov2_tiny.tflite
+    - assets/models/yolov2_tiny.txt
+    - assets/models/ssd_mobilenet.tflite
+    - assets/models/ssd_mobilenet.txt
+    - assets/models/mobilenet_v1_1.0_224.tflite
+    - assets/models/mobilenet_v1_1.0_224.txt
+    - assets/models/posenet_mv1_075_float_from_checkpoints.tflite
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

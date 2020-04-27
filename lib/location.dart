@@ -57,7 +57,7 @@ class _locationState extends State<location> {
   
   }}
       String error;
-  @override
+ 
   void vibrate()
   {
      Vibration.vibrate(pattern: [200, 100, 200, 100]);

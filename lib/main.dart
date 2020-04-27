@@ -3,7 +3,7 @@ import 'package:swipedetector/swipedetector.dart';
 import 'package:vibration/vibration.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'callingnmessageMenu.dart';
-import 'camera.dart';
+import 'camera/camhome.dart';
 import 'more.dart';
 import 'location.dart';
 import 'package:camera/camera.dart';
@@ -55,6 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _speakright() async{
     await flutterTts.speak("Location");
   }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SwipeDetector( 
@@ -77,7 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
               vibrate();
                _speakdown();
               setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>opencamera(widget.cameras)));
+                // loadModel();
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>CamHome(cameras)));
               });
             },
         onSwipeLeft: () {
